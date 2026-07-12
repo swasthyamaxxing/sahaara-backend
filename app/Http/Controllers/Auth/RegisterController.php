@@ -11,6 +11,21 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
+    // route definition -> function definition (before validate the incoming request)
+
+    /**
+     * Validates and processes the registration data for both caretakers and patients.
+     * @param  \App\Http\Requests\RegisterUserRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @bodyParam fullName string Required. The full name of the user. Example: John Doe
+     * @bodyParam email string Required. A unique email address. Example: john@example.com
+     * @bodyParam age integer Required. The age of the user. Example: 30
+     * @bodyParam password string Required. The user password (minimum length typically enforced).
+     * @bodyParam confirmPassword string Required. Must match the password field.
+     * @bodyParam gender string Required. The gender identity of the user.
+     * @bodyParam role string Required. The user's account type. Must be either 'caretaker' or 'patient'.
+     */
     public function register (RegisterUserRequest $request) {
         try {
             DB::beginTransaction();
@@ -20,9 +35,11 @@ class RegisterController extends Controller
 
             // Extract the required fields
             $user_data = [
-                'name' => $request->input('name'),
+                'name' => $request->input('fullName'),
                 'email' => $request->input('email'),
+                'age' => $request->input('age'),
                 'naked_password' => $request->input('password'),
+                'gender' => $request->input('gender'),
                 'role' => $request->input('role'),
             ];
             
@@ -39,7 +56,7 @@ class RegisterController extends Controller
             DB::commit();
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'message' => 'User signup successfully',
                 'access_token' => $token,
                 'token_type' => 'Bearer',

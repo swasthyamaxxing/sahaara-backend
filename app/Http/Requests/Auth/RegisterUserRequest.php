@@ -26,15 +26,20 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'fullName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+            'age' => [ 'required', 'integer', 'between:0,120' ],
             'password' => [
                 'required', 
                 'string', 
-                Password::min(8)->letters()->mixedCase()->numbers(), // Enforces stronger passwords
-                'confirmed' // Automatically checks for 'password_confirmation'
+                Password::min(8)->letters()->mixedCase()->numbers(),
             ],
-            'role' => ['required', Rule::in(['patient', 'caregiver'])],
+            'confirmPassword' => [
+                'required',
+                'same:password'
+            ],
+            'gender' => [ 'required', 'string', Rule::in(['male', 'female', 'other']) ],
+            'role' => ['required', Rule::in(['patient', 'caretaker'])],
         ];
     }
 }
