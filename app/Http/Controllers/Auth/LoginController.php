@@ -29,7 +29,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'The provided credentials do not match our record.',
-                ], status_code: 401);
+                ], 401);
             }
 
             // Check for the password
@@ -37,7 +37,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'The provided credentials do not match our record.'
-                ], status_code: 401);
+                ], 401);
             }
 
             // Login the user
@@ -51,13 +51,13 @@ class LoginController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user' => $user
-            ], status_code: 200);
+            ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' =>  'Something went wrong!',
-            ], status_code: 500);
+            ], 500);
         }
     }
 }

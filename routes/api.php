@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 
 
 Route::get('/users', function () {
@@ -16,3 +17,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('signup', [RegisterController::class, 'register']);
+Route::post('login', [LoginController::class, 'login']);
