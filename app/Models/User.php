@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
+use App\Models\Vital;
+use App\Models\CaretakerPatient;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -80,6 +83,21 @@ class User extends Authenticatable
      */
     public function isPatient() {
         return $this->role === 'patient';
+    }
+
+    public function caretaker() {
+        return $this->hasOne(CaretakerPatient::class, 'patient_id', 'id');
+    }
+
+    public function patients() {
+        return $this->hasMany(CaretakerPatient::class, 'caretaker_id', 'id');
+    }
+
+    /**
+     * Vitals
+     */
+    public function vitals () {
+        return $this->hasMany(Vital::class, 'patient_id', 'id');
     }
 
     /**
