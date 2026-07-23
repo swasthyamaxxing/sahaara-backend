@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Medical\MedicalHistoryController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +31,7 @@ Route::prefix('vitals')->middleware('auth:api')->group(function () {
 
 Route::post('signup', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
+
+
+
+Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);
