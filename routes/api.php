@@ -34,4 +34,8 @@ Route::post('login', [LoginController::class, 'login']);
 
 
 
-Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);
+Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);use App\Http\Controllers\MedicalRecordController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('medical-records', MedicalRecordController::class);
+});

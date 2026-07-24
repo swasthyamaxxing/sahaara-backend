@@ -1,0 +1,16 @@
+[1mdiff --git a/routes/api.php b/routes/api.php[m
+[1mindex 501083f..65305ef 100644[m
+[1m--- a/routes/api.php[m
+[1m+++ b/routes/api.php[m
+[36m@@ -34,4 +34,8 @@[m
+ [m
+ [m
+ [m
+[31m-Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);[m
+\ No newline at end of file[m
+[32m+[m[32mRoute::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);use App\Http\Controllers\MedicalRecordController;[m
+[32m+[m
+[32m+[m[32mRoute::middleware('auth:sanctum')->group(function () {[m
+[32m+[m[32m    Route::apiResource('medical-records', MedicalRecordController::class);[m
+[32m+[m[32m});[m
+\ No newline at end of file[m
