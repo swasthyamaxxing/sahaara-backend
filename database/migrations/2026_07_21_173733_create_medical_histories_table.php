@@ -6,20 +6,47 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('medical_histories', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('patient_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            $table->foreignId('caregiver_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            $table->string('condition_name');
+
+            $table->date('diagnosis_date');
+            $table->date('end_date')->nullable();
+
+            $table->enum('status', [
+                'active',
+                'resolved',
+                'under_observation',
+            ]);
+
+            $table->enum('severity', [
+                'mild',
+                'moderate',
+                'severe',
+            ]);
+
+            $table->text('notes')->nullable();
+            $table->text('action_taken')->nullable();
+            $table->json('attachments')->nullable();
+
+            $table->string('diagnosed_by')->nullable();
+            $table->date('review_date')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('medical_histories');

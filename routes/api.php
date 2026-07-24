@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\Medical\MedicalHistoryController;
 
 use Illuminate\Http\Request;
@@ -34,8 +35,5 @@ Route::post('login', [LoginController::class, 'login']);
 
 
 
-Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index']);use App\Http\Controllers\MedicalRecordController;
+Route::get('/medical-history/{user}/{patient}', [MedicalHistoryController::class, 'index'])
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('medical-records', MedicalRecordController::class);
-});
