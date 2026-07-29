@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\Medical\MedicalHistoryController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,19 +28,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 
-// Nuwan
-
-// End Nuwan
-
-// Drishya
-
-// End Drishya
-
-// Abisha
-
-// End Abisha
-
-// Atith
 Route::get('vitals/labels', [VitalLabelController::class, 'index']);
 
 Route::prefix('vitals')->middleware('auth:api')->group(function () {
@@ -52,4 +42,7 @@ Route::middleware('auth:api')->get('/patients', [CaretakerPatientController::cla
 Route::post('signup', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 
-// End Atith
+
+Route::middleware('auth:api')->group(function () {
+    Route::resource('patients.medical-history', MedicalHistoryController::class);
+});
