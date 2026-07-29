@@ -44,5 +44,17 @@ Route::post('login', [LoginController::class, 'login']);
 
 
 Route::middleware('auth:api')->group(function () {
+
+    /**
+     * Appointments
+     */
+    Route::resource('patients.appointments', AppointmentController::class);
+    // Get unique doctor, institution names
+    Route::get('patients/{patient}/appointments/doctors', [AppointmentController::class, 'doctors']);
+    Route::get('patients/{patient}/appointments/institutions', [AppointmentController::class, 'institutions']);
+
+    /**
+     * Medical History
+     */
     Route::resource('patients.medical-history', MedicalHistoryController::class);
 });

@@ -85,6 +85,21 @@ class User extends Authenticatable
         return $this->role === 'patient';
     }
 
+
+    public function canAccessPatientData(User $patient): bool
+    {
+        // User accessing their own data
+        if ($this->id === $patient->id) {
+            return true;
+        }
+
+        // User is an assigned caretaker
+        return $this->isCaretaker() && CaretakerPatient::where([
+            'patient_id'   => $patient->id,
+            'caretaker_id' => $this->id,
+        ])->exists();
+    }
+
     /**
      * a user can be a caretaker or a patient
      * this function finds the caretaker of the patient
