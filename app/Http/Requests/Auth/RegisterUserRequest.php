@@ -38,7 +38,7 @@ class RegisterUserRequest extends FormRequest
                 'required',
                 'same:password'
             ],
-            'gender' => [ 'required', 'string', Rule::in(['male', 'female', 'other']) ],
+            'gender' => [ 'required', 'string', Rule::in(['male', 'female', 'other', 'unspecified']) ],
             'role' => ['required', Rule::in(['patient', 'caretaker'])],
         ];
     }

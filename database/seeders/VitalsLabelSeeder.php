@@ -19,8 +19,11 @@ class VitalsLabelSeeder extends Seeder
         $vitals = [
             'Blood Pressure Systolic',
             'Blood Pressure Diastolic',
-            'Blood Sugar Level',
-            'Heartbeat'
+            'Blood Sugar',
+            'Heartbeat',
+            'Body Weight',
+            'Oxygen Saturation',
+            'Body Temperature'
         ];
 
         foreach ($vitals as $vital) {

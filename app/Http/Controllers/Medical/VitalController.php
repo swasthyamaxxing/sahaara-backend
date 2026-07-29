@@ -68,7 +68,7 @@ class VitalController extends Controller
         // User instance of the caretaker
         $user = $request->user();
         $patient_id = $request->input('patient_id');
-        $recorded_at = $request->input('recorded_at');
+        $recorded_at = $request->input('date');
         $vitals = $request->input('vitals');
 
         $failed = [];
@@ -100,7 +100,7 @@ class VitalController extends Controller
 
                 $success_count++;
             } catch (\Exception $e) {
-                $failed[] = $e;
+                $failed[] = $vital;
             }
         }
 

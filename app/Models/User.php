@@ -85,10 +85,25 @@ class User extends Authenticatable
         return $this->role === 'patient';
     }
 
+    /**
+     * a user can be a caretaker or a patient
+     * this function finds the caretaker of the patient
+     * you have to be a patient
+     */
     public function caretaker() {
         return $this->hasOne(CaretakerPatient::class, 'patient_id', 'id');
     }
 
+    // $user->caretaker->name { name: 'Jane Doe', }
+    // foreach( $user->caretakers() as $caretaker )
+    // hasOne User::where()->first();
+    // hasMany array of information User::where()->get();
+
+    /**
+     * this function finds the patients of the caretaker
+     * you have to be role: caretaker
+     * right now, we are working with users table
+     */
     public function patients() {
         return $this->hasMany(CaretakerPatient::class, 'caretaker_id', 'id');
     }
