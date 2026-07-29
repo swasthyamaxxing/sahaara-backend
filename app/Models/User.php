@@ -101,6 +101,13 @@ class User extends Authenticatable
     }
 
     /**
+     * Medications
+     */
+    public function medications () {
+        return $this->hasMany(Medication::class, 'patient_id', 'id');
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
