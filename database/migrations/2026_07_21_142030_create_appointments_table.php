@@ -24,6 +24,9 @@ return new class extends Migration
             $table->mediumText('presenting_problem')->nullable();
             $table->mediumText('prescription')->nullable();
             $table->text('notes')->nullable();
+
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

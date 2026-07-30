@@ -5,6 +5,8 @@ namespace App\Http\Requests\Appointment;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+use App\Models\CaretakerPatient;
+
 class UpdateAppointmentRequest extends FormRequest
 {
     /**
@@ -12,7 +14,27 @@ class UpdateAppointmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $caretaker = $this->user();
+
+        // 1. Ensure logged in user is a caretaker
+        if (! $caretaker || (method_exists($caretaker, 'isCaretaker') && ! $caretaker->isCaretaker())) {
+            return false;
+        }
+
+        // 2. Resolve patient from route parameter
+        $patient = $this->route('patient');
+
+        if (! $patient) {
+            return false;
+        }
+
+        $patientId = is_object($patient) ? $patient->id : $patient;
+
+        // 3. Ensure caretaker is assigned to this patient
+        return CaretakerPatient::where([
+            'patient_id'   => $patientId,
+            'caretaker_id' => $caretaker->id,
+        ])->exists();
     }
 
     /**
