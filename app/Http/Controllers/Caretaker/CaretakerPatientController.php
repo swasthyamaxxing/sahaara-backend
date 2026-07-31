@@ -58,8 +58,6 @@ class CaretakerPatientController extends Controller
          * confirmPassword
          * As these accounts do not have much capabilities, we suggest the password to be numeric
          */ 
-
-
         $validated = $request->validate([
             'fullName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],

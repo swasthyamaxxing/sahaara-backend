@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\User;
+
 class ProfileController extends Controller
 {
     /**
@@ -34,9 +36,28 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, User $user)
     {
-        //
+        
+        $loggedin_user = $request->user();
+
+        $is_self = $loggedin_user->id === $user->id;
+
+        $is_assigned_caretaker = $loggedin_user->canAccessPatientData($user);
+
+        if ( ! ( $is_self || $is_assigned_caretaker) ) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized request',
+            ], 403);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User data retrieved successfully',
+            'data' => $user
+        ], 200);
+
     }
 
     /**

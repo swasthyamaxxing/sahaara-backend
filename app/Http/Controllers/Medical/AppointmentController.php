@@ -212,7 +212,7 @@ class AppointmentController extends Controller
 
             $initials = $request->input('doctor');
 
-            $doctorNames = Appointment::where('patient_id', $patient->id)
+            $doctorNames = Appointment::where('patient_id', 1)
                 ->when($initials, fn ($query, $initials) => $query->where('doctor_name', 'like', '%' . $initials . '%'))
                 ->distinct()
                 ->pluck('doctor_name');
@@ -221,6 +221,7 @@ class AppointmentController extends Controller
                 'status'  => true,
                 'message' => 'Doctor names returned successfully',
                 'data'    => $doctorNames,
+                'count' => count($doctorNames),
             ], 200);
 
         } catch (\Exception $e) {

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
+use App\Models\Medication;
+
 use App\Models\Vital;
 use App\Models\CaretakerPatient;
 
@@ -128,6 +130,13 @@ class User extends Authenticatable
      */
     public function vitals () {
         return $this->hasMany(Vital::class, 'patient_id', 'id');
+    }
+
+    /**
+     * Medications
+     */
+    public function medications () {
+        return $this->hasMany(Medication::class, 'patient_id', 'id');
     }
 
     /**
