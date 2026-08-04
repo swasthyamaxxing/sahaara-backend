@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Caretaker;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\PatientResource;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
+use App\Models\CaretakerPatient;
 
 class CaretakerPatientController extends Controller
 {
@@ -37,8 +44,7 @@ class CaretakerPatientController extends Controller
      * Link the patient here
      * 
      */
-    public function create_patient (Request $request) {
-
+    public function create_patient (Request $request, User $caretaker) {
         $caretaker = $request->user();
 
         if ( ! $caretaker->isCaretaker()  ) {
@@ -47,17 +53,15 @@ class CaretakerPatientController extends Controller
                 'message' => 'Only caretakers can add patients',
             ], 403);
         }
-        
         /**
          * The caretaker fills a form with details of the patients
          * fullName,
+         * email,
          * age,
          * gender,
-         * email,
          * password,
-         * confirmPassword
          * As these accounts do not have much capabilities, we suggest the password to be numeric
-         */ 
+        */ 
         $validated = $request->validate([
             'fullName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
@@ -67,25 +71,30 @@ class CaretakerPatientController extends Controller
                 'string', 
                 Password::min(8),
             ],
-            'gender' => [ 'required', 'string', Rule::in(['male', 'female', 'other']) ],
+            'gender' => [ 'required', 'string', Rule::in(['male', 'female', 'other', 'unspecified']) ],
         ]);
-
+                
         try {
-            $patient = User::create($validated);
+            $patient = DB::transaction(function () use ($validated, $caretaker) {
+                
+                $patient = User::create([
+                    'name' => $validated['fullName'],
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password']),
+                    'age' => $validated['age'],
+                    'gender' => $validated['gender'],
+                    'role' => 'patient',
+                ]);
 
-            $patient = User::create([
-                'name' => $validated['fullName'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'age' => $validated['age'],
-                'gender' => $validated['gender'],
-                'role' => 'patient',
-            ]);
+                CaretakerPatient::create([
+                    'patient_id' => $patient->id,
+                    'caretaker_id' => $caretaker->id,
+                ]);
 
-            $caretaker_patient = CaretakerPatient::create([
-                'patient_id' => $patient->id,
-                'caretaker_id' => $caretaker->id,
-            ]);
+                return $patient;
+            });
+
+
 
             return response()->json([
                 'status' => true,
@@ -93,11 +102,11 @@ class CaretakerPatientController extends Controller
                 'patient' => $patient,
             ], 201);
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Something went wrong',
-                'error' => $e->getMessage(), // remove in production
+                'message' => 'Something went wrong.',
+                'error' => $e,
             ], 500);
         }
 

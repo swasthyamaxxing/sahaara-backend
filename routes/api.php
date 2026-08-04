@@ -42,7 +42,6 @@ Route::prefix('vitals')->middleware('auth:api')->group(function () {
     Route::post('/store', [VitalController::class, 'store']);
 });
 
-Route::middleware('auth:api')->get('/patients', [CaretakerPatientController::class, 'get_patients']);
 
 Route::post('signup', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
@@ -72,4 +71,10 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('patients/{patient}/medications/{medication}/toggle', [MedicationController::class, 'toggleStatus']);
     Route::resource('patients.medications', MedicationController::class);
     Route::resource('patients.medication-schedules', MedicationScheduleController::class);
+
+    /**
+     * Link/unlink Caretaker and Patient
+     */
+    Route::middleware('auth:api')->get('caretaker/{caretaker}/patients', [CaretakerPatientController::class, 'get_patients']);
+    Route::middleware('auth:api')->post('caretaker/{caretaker}/patients', [CaretakerPatientController::class, 'create_patient']);
 });

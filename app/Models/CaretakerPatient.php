@@ -15,6 +15,10 @@ class CaretakerPatient extends Model
         return $this->belongsTo(User::class, 'caretaker_id', 'id');
     }
 
+    protected $fillable = [
+        'caretaker_id', 'patient_id',
+    ];
+
     protected $table = "caretaker_patient";
     
 }
