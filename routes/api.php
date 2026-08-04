@@ -20,12 +20,11 @@ use App\Http\Controllers\Caretaker\CaretakerPatientController;
 
 use App\Http\Controllers\Medication\MedicationController;
 use App\Http\Controllers\Medication\MedicationScheduleController;
+use App\Http\Controllers\PushSubscriptionController;
 
-
-
-
-Route::get('/users', function () {
-    return response()->json(['message' => 'Hello Next.js front-end!']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('/subscribe', [PushSubscriptionController::class, 'subscribe']);
+    Route::post('/unsubscribe', [PushSubscriptionController::class, 'unsubscribe']);
 });
 
 Route::get('/user', function (Request $request) {

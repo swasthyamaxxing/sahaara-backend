@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\Vital\StoreVitalRequest;
 
+use App\Notifications\WebPushNotification;
+
 use App\Models\User;
 use App\Models\Vital;
 
@@ -105,6 +107,34 @@ class VitalController extends Controller
         }
 
         $total_vitals_count = count($vitals);
+
+        // Send push notification if at least one vital was successfully stored
+    if ($success_count > 0) {
+        try {
+            // Notify the caretaker who recorded the vitals
+            $user->notify(new WebPushNotification(
+                'Vitals Logged Successfully',
+                "Recorded {$success_count} vital(s) for Patient #{$patient_id}.",
+                "/care-taker/patient-records" // URL to navigate to on click
+            ));
+
+            /* 
+            // OPTIONAL: If you want to notify the PATIENT instead:
+            // $patient = User::find($patient_id);
+            // if ($patient) {
+            //     $patient->notify(new WebPushNotification(
+            //         'New Vitals Logged',
+            //         "Your caretaker logged {$success_count} new vital reading(s).",
+            //         "/patient/vitals"
+            //     ));
+            // }
+            */
+        } catch (\Exception $e) {
+            // Log error so notification failure doesn't break the API response
+            \Log::error('WebPush Notification failed: ' . $e->getMessage());
+        }
+    }
+
 
         if (count($failed) == 0) {
             return response()->json([

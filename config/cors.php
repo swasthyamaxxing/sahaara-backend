@@ -21,7 +21,11 @@ return [
 
     'allowed_origins' => [
         env('FRONTEND_URL', 'http://localhost:3000'),
-        'https://sahaara-frontend-ten.vercel.app'
+        'https://sahaara-frontend-ten.vercel.app',
+        'http://192.168.18.81:3000',
+        'https://fine-boats-say.loca.lt',
+        'http://localhost:5174'
+
     ],
 
     'allowed_origins_patterns' => [],
