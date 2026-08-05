@@ -27,9 +27,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/unsubscribe', [PushSubscriptionController::class, 'unsubscribe']);
 });
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:api');
+
+Route::middleware('auth:api')->get('user/me', [ProfileController::class, 'me']);
 
 
 Route::get('vitals/labels', [VitalLabelController::class, 'index']);

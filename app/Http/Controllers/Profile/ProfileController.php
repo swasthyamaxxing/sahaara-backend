@@ -17,6 +17,23 @@ class ProfileController extends Controller
         //
     }
 
+    public function me (Request $request) {
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Retrieved user records successfully',
+            'data' => $user
+        ], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
