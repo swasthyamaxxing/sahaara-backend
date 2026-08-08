@@ -10,12 +10,14 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 
 
+
 use App\Http\Controllers\Medical\AppointmentController;
 use App\Http\Controllers\Medical\VitalController;
 use App\Http\Controllers\Medical\VitalLabelController;
 
 use App\Http\Controllers\Profile\ProfileController;
 
+use App\Http\Controllers\Caretaker\CaretakerController;
 use App\Http\Controllers\Caretaker\CaretakerPatientController;
 
 use App\Http\Controllers\Medication\MedicationController;
@@ -32,7 +34,7 @@ Route::middleware('auth:api')->group(function () {
 // })->middleware('auth:api');
 
 Route::middleware('auth:api')->get('user/me', [ProfileController::class, 'me']);
-
+Route::middleware('auth:api')->get('caretaker', [CaretakerController::class, 'index']);
 
 Route::get('vitals/labels', [VitalLabelController::class, 'index']);
 
