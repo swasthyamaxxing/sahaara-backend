@@ -36,7 +36,6 @@ class CaretakerController extends Controller
                     'patients' => $patients->count(),
                     'appointments' => $todayAppointments,
                     'vitals' => $patientsNeedingVitals,
-                    'today' => today()
                 ],
             ]);
         } catch (\Throwable $e) {
